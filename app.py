@@ -6,6 +6,9 @@ import os
 app = Flask(__name__)
 CORS(app)  # CORS enable kar diya hai
 
+# Cookies file ka path (GitHub repository me save kiya hua)
+COOKIES_FILE = "cookies.txt"
+
 @app.route('/')
 def home():
     return "Welcome to YouTube Downloader Backend"
@@ -22,11 +25,17 @@ def download_video():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
+    # Headers aur cookies set karna
     ydl_opts = {
         'format': 'best',
         'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
         'quiet': True,
         'noplaylist': True,
+        'cookiefile': COOKIES_FILE,  # YouTube cookies ka use
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+        }
     }
     
     try:
